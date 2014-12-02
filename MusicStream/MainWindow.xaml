@@ -166,7 +166,7 @@
         </Grid.ColumnDefinitions>
         <TabControl Grid.Row="0" Grid.RowSpan="2" Background="Transparent">
             <TabItem Header="Music Libary">
-                <TreeView Background="Transparent" ItemsSource="{Binding ElementName=thisWindow, Path=Artists}" Grid.RowSpan="2">
+                <TreeView Background="Transparent" ItemsSource="{Binding ElementName=thisWindow, Path=Artists}">
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="{x:Type TreeViewItem}">
                             <EventSetter Event="MouseDoubleClick" Handler="AddArtist" />
@@ -204,35 +204,14 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
             </TabItem>
-            <TabItem Header="Playlists">
-                <StackPanel>
-                    <!--<TreeView Background="Transparent" ItemsSource="{Binding ElementName=thisWindow, Path=PlaylistsList}">
-                        <TreeView.ItemContainerStyle>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <EventSetter Event="MouseDoubleClick" Handler="AddPlaylist" />
-                                <Setter Property="ToolTip" Value="Double click to add"/>
-                            </Style>
-                        </TreeView.ItemContainerStyle>
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding Songs}">
-                                <TextBlock Text="{Binding Name}" />
-                                <HierarchicalDataTemplate.ItemContainerStyle>
-                                    <Style TargetType="{x:Type TreeViewItem}">
-                                        <EventSetter Event="MouseDoubleClick" Handler="AddSong" />
-                                        <Setter Property="ToolTip" Value="Double click to add"/>
-                                    </Style>
-                                </HierarchicalDataTemplate.ItemContainerStyle>
-                                <HierarchicalDataTemplate.ItemTemplate>
-                                    <HierarchicalDataTemplate>
-                                        <WrapPanel>
-                                            <TextBlock Text="{Binding Name}" />
-                                        </WrapPanel>
-                                    </HierarchicalDataTemplate>
-                                </HierarchicalDataTemplate.ItemTemplate>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>-->
-                    <WrapPanel>
+            <TabItem Header="Playlists" Margin="-3,0,-1,-3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="45"/>
+                    </Grid.RowDefinitions>                  
+                    <WrapPanel Grid.Row="0">
                         <ComboBox SelectionChanged="ChangePlaylist" x:Name="PlaylistComboBox" Margin="4" ItemsSource="{Binding ElementName=thisWindow, Path=PlaylistsList}" Width="200">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -264,15 +243,33 @@
                             </Button.Template>
                             <Image Source="pack://application:,,,/Resources/minus.png" />
                         </Button>
+                        <!--DelPlaylist-->
+                        <Button Click="InsertPlaylist" Width="30" Height="30" ToolTip="Make it to current playlist.">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Grid>
+                                        <Rectangle Stroke="Transparent" Fill="Transparent" />
+                                        <ContentPresenter Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Image Source="pack://application:,,,/Resources/arrow-right-a.png" />
+                        </Button>
                     </WrapPanel>
-                    <ListView Background="Transparent" BorderThickness="0" ItemsSource="{Binding ElementName=thisWindow,Path=SelectedPlaylist.Songs}">
+                    <ListView Grid.Row="1" Background="Transparent" BorderThickness="0" ItemsSource="{Binding ElementName=thisWindow,Path=SelectedPlaylist.Songs}" Name="PlaylistSongs">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <EventSetter Event="MouseDoubleClick" Handler="AddSong" />
+                                <Setter Property="ToolTip" Value="Double click to add"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <WrapPanel>
+                    <WrapPanel Grid.Row="2">
                         <!--AddSong-->
                         <Button Click="AddSongToPlaylist" Width="50" Height="50" ToolTip="Add a entry.">
                             <Button.Template>
@@ -298,7 +295,7 @@
                             <Image Source="pack://application:,,,/Resources/minus.png" />
                         </Button>
                     </WrapPanel>
-                </StackPanel>
+                </Grid>
             </TabItem>
             <!--<TabItem Header="Search">
                 
