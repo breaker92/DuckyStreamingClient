@@ -11,7 +11,7 @@ using System.Media;
 using System.Windows.Media;
 namespace MusicStream
 {
-    public class song : IDisposable, INotifyPropertyChanged
+    public class song : IDisposable, INotifyPropertyChanged, INamed
     {
         public song(string name, string uid, string path, int sec)
         {
@@ -51,17 +51,8 @@ namespace MusicStream
             return songStream;
         }
 
-        public void getSong()
-        {
-            //var uriStreamReference = RandomAccessStreamReference.CreateFromUri(myUri);
-            //var uriStream = await uriStreamReference.OpenAsync()
-            MediaPlayer m = new MediaPlayer();
-            
-        }
 
         public Uri Uri { get { return new Uri(uriKind); } }
-
-        public bool Current { get; set; }
 
         public void startDownloading()
         {
@@ -76,25 +67,6 @@ namespace MusicStream
             string songPath = connection.domain + "sessions/public/" + this.UID;
             uriKind = songPath;
             return;
-            request = (HttpWebRequest)WebRequest.Create(songPath);
-            request.UserAgent = "Bernd";
-            request.Method = "GET";
-            if (connection.loginCookie != null)
-            {
-                request.CookieContainer = new CookieContainer();
-                request.CookieContainer.Add(new Uri(connection.domain), connection.loginCookie);
-            }
-            request.ContentType = "text/plain";
-            request.ContentLength = 0;
-
-            var response2 = request.GetResponse();
-            Stream stream = response2.GetResponseStream();
-            if (downloader == null || !downloader.IsBusy)
-            {
-                downloader = new BackgroundWorker();
-                downloader.DoWork += downloader_DoWork;
-                //downloader.RunWorkerAsync(stream);
-            }
         }
 
         public bool isInUse { get; set; }
@@ -102,11 +74,6 @@ namespace MusicStream
         void downloader_DoWork(object sender, DoWorkEventArgs e)
         {
             Stream stream = e.Argument as Stream;
-            //if (songStream == null)
-            //{
-            //    startDownloading();
-            //    return;
-            //}
             while(true)
             {
                 if (!isInUse)
@@ -118,21 +85,6 @@ namespace MusicStream
                     {
                         songStream.Write(buffer, 0, read);
                     }
-                    //StreamReader myStreamReader = new StreamReader(songStream);
-                    //byte[] data = Encoding.Default.GetBytes(myStreamReader.ReadToEnd());
-                    //bool temp = false;
-                    //while (!temp)
-                    //{
-                    //    if(!isInUse)
-                    //    {
-                    //        myStreamReader.Close();
-                    //        songStream.Close();
-                    //        songStream = new MemoryStream(data);
-                    //        temp = true;
-
-                    //    }
-                    //    Thread.Sleep(100);
-                    //}
                     break;
                 }
                 Thread.Sleep(100);
@@ -144,10 +96,6 @@ namespace MusicStream
         {
             if(songStream != null)
             {
-                //if(songStream.GetType() == typeof(MemoryStream))
-                //{
-                //    ((MemoryStream)songStream)
-                //}
                 songStream.Close();
                 songStream = null;
             }
@@ -188,5 +136,22 @@ namespace MusicStream
         }
 
         #endregion
+
+        private bool m_MultiSelected;
+
+        public bool MultiSelected
+        {
+            get
+            {
+                return m_MultiSelected;
+            }
+
+            set
+            {
+                m_MultiSelected = value;
+                NotifyPropertyChanged("MultiSelected");
+            }
+        }
+
     }
 }

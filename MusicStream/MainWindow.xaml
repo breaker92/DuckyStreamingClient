@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:UI="clr-namespace:MusicStream.Properties" 
-        xmlns:ad="clr-namespace:Xceed.Wpf.AvalonDock;assembly=Xceed.Wpf.AvalonDock"
         WindowState="Maximized"
         Background="#9CCDFF"
         Name="thisWindow"
@@ -150,9 +149,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-        <Style TargetType="{x:Type ScrollBar}">
-            
         </Style>
     </Window.Resources>
     <Grid>
@@ -355,7 +351,7 @@
                         <Image Width="35" Source="{Binding ElementName=thisWindow,Path=PlayButtonImage}"/>
                     </Button>
                     <!--Backwardbutton -->
-                    <Button Width="50" Height="50" Margin="5">
+                    <Button Width="50" Height="50" Margin="5" Click="PlayNext" ToolTip="Play next song.">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Grid>
@@ -366,7 +362,7 @@
                         </Button.Template>
                         <Image Width="35" Source="pack://application:,,,/Resources/skip-forward.png" />
                     </Button>
-                    <ToggleButton IsChecked="False">
+                    <ToggleButton IsChecked="{Binding ElementName=thisWindow, Path=Shuffle}">
                         <ToggleButton.Template>
                             <ControlTemplate TargetType="ToggleButton">
                                 <Grid>
@@ -377,21 +373,19 @@
                         </ToggleButton.Template>
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Image Width="40" Source="pack://application:,,,/Resources/shuffle.png" />
+                                    </Setter.Value>
+                                </Setter>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked}" Value="true">
+                                    <Trigger Property="IsChecked" Value="True">
                                         <Setter Property="Content">
                                             <Setter.Value>
-                                                <Image Width="40" Source="pack://application:,,,/Resources/shuffle.png" />
+                                                <Image Width="40" Source="pack://application:,,,/Resources/shuffle-white.png" />
                                             </Setter.Value>
                                         </Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsChecked}" Value="false">
-                                        <Setter Property="Content">
-                                            <Setter.Value>
-                                                <Image Width="40" Source="pack://application:,,,/Resources/shuffle.png" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </DataTrigger>
+                                    </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </ToggleButton.Style>

@@ -1,0 +1,84 @@
+﻿<Window x:Class="MusicStream.SongPicker"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Name="thisWindow"
+        Background="#9CCDFF"
+        Title="" Height="300" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55px" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="55px" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <Label  HorizontalAlignment="Left" FontSize="16" Margin="12">Search:</Label>
+            <ComboBox SelectionChanged="ChangeFilter" Name="FilterCombo" ItemsSource="{Binding ElementName=thisWindow, Path=FilterList}" Width="150" Margin="15" HorizontalAlignment="Left" />
+            <TextBox Name="SearchBox" Width="150" Margin="15" HorizontalAlignment="Left" TextChanged="Search" />
+            <Button Click="CloseSearching" Width="30" Height="30" ToolTip="Stop searching." Visibility="{Binding ElementName=thisWindow, Path=SearchingVisibility}">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Rectangle Stroke="Transparent" Fill="Transparent" />
+                            <ContentPresenter Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+                <Image Source="pack://application:,,,/Resources/android-close.png" />
+            </Button>
+        </DockPanel>
+        <TreeView SelectedItemChanged="SongTree_SelectedItemChanged" Grid.Row="1" Name="SongTree" Background="Transparent" ItemsSource="{Binding ElementName=thisWindow, Path=Artists}">
+            <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                      Color="#8b1c62" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                      Color="White" />
+            </TreeView.Resources>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding MultiSelected}" Value="True">
+                            <Setter Property="Background" Value="#8b1c62" />
+                            <Setter Property="Foreground" Value="White" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Albums}">
+                    <TextBlock Text="{Binding Name}" />
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Songs}">
+                            <TextBlock Text="{Binding Name}" />
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <HierarchicalDataTemplate>
+                                    <WrapPanel>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </WrapPanel>
+                                </HierarchicalDataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <ListView Background="#9CCDFF" SelectionChanged="ChangeSearchSelection" Grid.Row="1" ItemsSource="{Binding ElementName=thisWindow,Path=SearchResult}" Visibility="{Binding ElementName=thisWindow, Path=SearchingVisibility}">
+            <ListView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                      Color="#8b1c62" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                      Color="White" />
+            </ListView.Resources>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel>
+                        <TextBlock Text="{Binding Name}" />
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <DockPanel Grid.Row="2">
+            <Button HorizontalAlignment="Left" Content="Apply" Width="90" Margin="15" Click="Apply" />
+            <Button HorizontalAlignment="Right" Content="Cancel" Width="90" Margin="15" Click="Cancel" />
+        </DockPanel>
+    </Grid>
+</Window>

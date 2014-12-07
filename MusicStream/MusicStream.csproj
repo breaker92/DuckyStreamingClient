@@ -59,21 +59,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.AvalonDock">
-      <HintPath>..\packages\AvalonDock.2.0.2000\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero">
-      <HintPath>..\packages\AvalonDock.2.0.2000\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Expression">
-      <HintPath>..\packages\AvalonDock.2.0.2000\lib\net40\Xceed.Wpf.AvalonDock.Themes.Expression.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
-      <HintPath>..\packages\AvalonDock.2.0.2000\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010">
-      <HintPath>..\packages\AvalonDock.2.0.2000\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -87,6 +72,7 @@
     </Compile>
     <Compile Include="connection.cs" />
     <Compile Include="Encryption.cs" />
+    <Compile Include="INamed.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="player.cs" />
     <Compile Include="player1.cs" />
@@ -96,6 +82,9 @@
     </Compile>
     <Compile Include="ReadFullyStream.cs" />
     <Compile Include="song.cs" />
+    <Compile Include="SongPicker.xaml.cs">
+      <DependentUpon>SongPicker.xaml</DependentUpon>
+    </Compile>
     <Page Include="ConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -114,6 +103,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PlaylistName.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SongPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,6 +129,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -193,6 +187,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\arrow-right-a.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\android-close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\shuffle-white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\repeat2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
