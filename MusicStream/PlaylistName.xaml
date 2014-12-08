@@ -1,0 +1,14 @@
+﻿<Window x:Class="MusicStream.PlaylistName"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        ResizeMode="NoResize"
+        Icon="Ente.ico"
+        Title="Insert Playlist name" Height="150" Width="400">
+    <StackPanel>
+        <TextBox x:Name="NameBox" Height="30" Margin="15" Width="300" />
+        <DockPanel>
+            <Button HorizontalAlignment="Left" Content="Apply" Width="90" Margin="15" Click="Button_Click" />
+            <Button HorizontalAlignment="Right" Content="Cancel" Width="90" Margin="15" Click="Button_Click_1" />
+        </DockPanel>
+    </StackPanel>
+</Window>
