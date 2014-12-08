@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStream", "MusicStream\MusicStream.csproj", "{F075FADE-97B7-44C3-ADE9-7BB5A6C896C5}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{B1285B9F-3D04-4709-9A7F-63FB3442B451}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DuckyStreaming", "Setup\Setup.vdproj", "{B1285B9F-3D04-4709-9A7F-63FB3442B451}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
