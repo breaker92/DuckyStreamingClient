@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Media;
 using NAudio.Wave;
+using System.Diagnostics;
 
 namespace MusicStream
 {
@@ -187,12 +188,33 @@ namespace MusicStream
                     catch(WebException ex)
                     {
                         MessageBox.Show("Error: \r\n" + ex.Message + "\r\n \r\nResponse: \r\n" + ex.Response);
+                        //RestartApp(Process.GetCurrentProcess().Id,"");
+                        //this.Close();
                         return;
                     }
 
                 }
             }
             return;
+        }
+
+        static void RestartApp(int pid, string applicationName)
+        {
+            // Wait for the process to terminate
+            Process process = null;
+            try
+            {
+                process = Process.GetProcessById(pid);
+                process.WaitForExit(1000);
+            }
+            catch (ArgumentException ex)
+            {
+                // ArgumentException to indicate that the 
+                // process doesn't exist?   LAME!!
+            }
+            applicationName = System.AppDomain.CurrentDomain.FriendlyName;
+            applicationName = Environment.GetCommandLineArgs()[0]; ;
+            Process.Start(applicationName, applicationName);
         }
 
         public ObservableCollection<artist> artists;
@@ -431,6 +453,7 @@ namespace MusicStream
                 player.stop();
                 System.Threading.Thread.Sleep(200);
                 player.play(currentSong);
+                song_change();
                 player_changeState();
             }
         }
@@ -739,6 +762,30 @@ namespace MusicStream
                 playlist.Clear();
                 playlist.AddRange(Playlist.Songs);
                 NotifyPropertyChanged("Playlist");
+            }
+        }
+
+        private void Search(object sender, TextChangedEventArgs e)
+        {
+            if (artists != null && sender.GetType() == typeof(TextBox))
+            {
+                TextBox box = sender as TextBox;
+                if(box.Text != null && !string.IsNullOrWhiteSpace(box.Text))
+                {
+                    SongPicker sp = new SongPicker(new List<artist>(artists.AsEnumerable()), box.Text);
+                    sp.ShowDialog();
+                    if (sp.DialogResult == true)
+                    {
+                        List<song> songs = sp.Songs;
+                        //foreach (song s in songs)
+                        //{
+                        //    playlist.Add(s);
+                        //}
+                        playlist.AddRange(songs);
+                        NotifyPropertyChanged("Playlist");
+                    }
+                    box.Text = "";
+                }
             }
         }
 

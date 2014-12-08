@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -37,13 +38,24 @@ namespace MusicStream
             }
         }
 
-        public SongPicker(List<artist> Artists, string searchString = "", SearchFilter Filter = SearchFilter.Song )
+        public SongPicker(List<artist> Artists, string searchString = null, SearchFilter Filter = SearchFilter.Song )
         {
             SearchString = searchString;
             m_artists = new ObservableCollection<artist>(Artists);
-            SearchingVisibility = Visibility.Collapsed;
+            if(SearchString != null )
+            {
+                SearchingVisibility = Visibility.Visible;
+            }                
+            else
+                SearchingVisibility = Visibility.Collapsed;
 
             InitializeComponent();
+            if (SearchString != null && SearchBox != null)
+            {
+                SearchBox.Text = SearchString;
+                SearchBox.Focus();
+                SearchBox.CaretIndex = SearchBox.Text.Length;
+            } 
 
             FilterCombo.SelectedIndex = (int)Filter;
         }
@@ -74,21 +86,22 @@ namespace MusicStream
 
         private void Cancel(object sender, RoutedEventArgs e)
         {
-            foreach (object o in m_SelectedList)
-            {
-                if (o.GetType() == typeof(song))
+            if (m_SelectedList != null)
+                foreach (object o in m_SelectedList)
                 {
-                    ((song)o).MultiSelected = false;
+                    if (o.GetType() == typeof(song))
+                    {
+                        ((song)o).MultiSelected = false;
+                    }
+                    else if (o.GetType() == typeof(album))
+                    {
+                        ((album)o).MultiSelected = false;
+                    }
+                    else if (o.GetType() == typeof(artist))
+                    {
+                        ((artist)o).MultiSelected = false;
+                    }
                 }
-                else if (o.GetType() == typeof(album))
-                {
-                    ((album)o).MultiSelected = false;
-                }
-                else if (o.GetType() == typeof(artist))
-                {
-                    ((artist)o).MultiSelected = false;
-                }
-            }
             DialogResult = false;
             this.Close();
         }
@@ -225,7 +238,7 @@ namespace MusicStream
             // Searching for artist
             if(FilterCombo.SelectedIndex == 2)
             {
-                List<INamed> result = new List<INamed>(Artists.Where(x => x.Name.Contains(searchString)));
+                List<INamed> result = new List<INamed>(Artists.Where(x => CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Name, searchString, CompareOptions.IgnoreCase) != -1));
                 SearchResult = new ObservableCollection<INamed>(result);
                 NotifyPropertyChanged("SearchResult");
             }
@@ -237,7 +250,7 @@ namespace MusicStream
                 {
                     albums.AddRange(a.Albums);
                 }
-                List<INamed> result = new List<INamed>(albums.Where(x => x.Name.Contains(searchString)));
+                List<INamed> result = new List<INamed>(albums.Where(x => CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Name, searchString, CompareOptions.IgnoreCase) != -1));
                 SearchResult = new ObservableCollection<INamed>(result);
                 NotifyPropertyChanged("SearchResult");
             }
@@ -249,7 +262,8 @@ namespace MusicStream
                 {
                     songs.AddRange(a.Songs);
                 }
-                List<INamed> result = new List<INamed>(songs.Where(x => x.Name.Contains(searchString)));
+                List<INamed> result = new List<INamed>(songs.Where(x => CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Name, searchString, CompareOptions.IgnoreCase) != -1));
+                //List<INamed> result = new List<INamed>(songs.Where(x => x.Name.Contains((searchString))));
                 SearchResult = new ObservableCollection<INamed>(result);
                 NotifyPropertyChanged("SearchResult");
             }

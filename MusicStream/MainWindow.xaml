@@ -153,14 +153,19 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="150" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TabControl Grid.Row="0" Grid.RowSpan="2" Background="Transparent">
+        <DockPanel>
+            <Label  HorizontalAlignment="Left" FontSize="12" Margin="12">Search:</Label>
+            <TextBox Name="SearchBox" Width="150" Margin="15" HorizontalAlignment="Left" TextChanged="Search" />
+        </DockPanel>
+        <TabControl Grid.Row="1" Grid.RowSpan="2" Background="Transparent">
             <TabItem Header="Music Libary">
                 <TreeView Background="Transparent" ItemsSource="{Binding ElementName=thisWindow, Path=Artists}">
                     <TreeView.ItemContainerStyle>
@@ -297,7 +302,7 @@
                 
             </TabItem>-->
         </TabControl>
-        <ListView Background="Transparent" SelectionMode="Single"  Grid.Column="1" ItemContainerStyle="{StaticResource PlaylistItem}" ItemsSource="{Binding ElementName=thisWindow, Path=Playlist}" SelectionChanged="ListView_Selected">
+        <ListView Background="Transparent" SelectionMode="Single"  Grid.Column="1" Grid.RowSpan="2" ItemContainerStyle="{StaticResource PlaylistItem}" ItemsSource="{Binding ElementName=thisWindow, Path=Playlist}" SelectionChanged="ListView_Selected">
             <ListView.ItemTemplate>
                         <DataTemplate>
                             <WrapPanel>
