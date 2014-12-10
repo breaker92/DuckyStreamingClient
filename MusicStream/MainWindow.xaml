@@ -165,9 +165,9 @@
             <Label  HorizontalAlignment="Left" FontSize="12" Margin="12">Search:</Label>
             <TextBox Name="SearchBox" Width="150" Margin="15" HorizontalAlignment="Left" TextChanged="Search" />
         </DockPanel>
-        <TabControl Grid.Row="1" Grid.RowSpan="2" Background="Transparent">
+        <TabControl BorderThickness="0" Grid.Row="1" Grid.RowSpan="2" Background="Transparent">
             <TabItem Header="Music Libary">
-                <TreeView Background="Transparent" ItemsSource="{Binding ElementName=thisWindow, Path=Artists}">
+                <TreeView BorderThickness="0" Background="Transparent" ItemsSource="{Binding ElementName=thisWindow, Path=Artists}">
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="{x:Type TreeViewItem}">
                             <EventSetter Event="MouseDoubleClick" Handler="AddArtist" />
@@ -331,7 +331,7 @@
                         <Image Width="35" Source="pack://application:,,,/Resources/stop.png" />
                     </Button>
                     <!--Backwardbutton -->
-                    <Button Width="50" Height="50" Margin="5">
+                    <Button Width="50" Height="50" Margin="5" Click="PlayPrev" ToolTip="Previous song.">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Grid>
@@ -356,7 +356,7 @@
                         <Image Width="35" Source="{Binding ElementName=thisWindow,Path=PlayButtonImage}"/>
                     </Button>
                     <!--Backwardbutton -->
-                    <Button Width="50" Height="50" Margin="5" Click="PlayNext" ToolTip="Play next song.">
+                    <Button Width="50" Height="50" Margin="5" Click="PlayNext" ToolTip="Next song.">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Grid>
@@ -394,6 +394,41 @@
                                 </Style.Triggers>
                             </Style>
                         </ToggleButton.Style>
+                    </ToggleButton>
+                    <ToggleButton IsThreeState="True" IsChecked="{Binding ElementName=thisWindow, Path=Repeat}">
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid>
+                                    <Rectangle StrokeThickness="1" Stroke="Transparent" Fill="Transparent" />
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                        <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <Image Width="40" Source="pack://application:,,,/Resources/repeat.png" />
+                                        </Setter.Value>
+                                    </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <Image Width="40" Source="pack://application:,,,/Resources/repeat-white.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <Image Width="40" Source="pack://application:,,,/Resources/repeat-white-one.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                            </ToggleButton.Style>
                     </ToggleButton>
                 </WrapPanel>
                 <DockPanel>

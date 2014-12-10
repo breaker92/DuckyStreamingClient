@@ -213,9 +213,29 @@ namespace MusicStream.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap repeat2 {
+        public static System.Drawing.Bitmap repeat {
             get {
-                object obj = ResourceManager.GetObject("repeat2", resourceCulture);
+                object obj = ResourceManager.GetObject("repeat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap repeat_white {
+            get {
+                object obj = ResourceManager.GetObject("repeat_white", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap repeat_white_one {
+            get {
+                object obj = ResourceManager.GetObject("repeat_white_one", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

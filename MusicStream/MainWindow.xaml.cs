@@ -63,9 +63,14 @@ namespace MusicStream
             player_changeTime();
         }
 
-        bool repeatAll = false;
+        private bool repeatAll { get { return Repeat == true; } }
+        private bool repeatSong { get { return Repeat == false; } }
+        private bool repeatNone { get { return Repeat == null; } }
 
-        bool Repeat { get; set; }
+        /// <summary>
+        /// true = repeat all; false = repeat song; null = no repeat
+        /// </summary>
+        public bool? Repeat { get; set; }
 
         private void ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -187,7 +192,23 @@ namespace MusicStream
                     }
                     catch(WebException ex)
                     {
-                        MessageBox.Show("Error: \r\n" + ex.Message + "\r\n \r\nResponse: \r\n" + ex.Response);
+                        string Response;
+                        if (ex.Response != null)
+                        {
+                            Stream RS = ex.Response.GetResponseStream();
+                            if (RS.Length < int.MaxValue)
+                            {
+                                byte[] buffer = new byte[RS.Length];
+                                RS.Read(buffer, 0, (int)RS.Length);
+                                System.Text.UTF8Encoding enc = new System.Text.UTF8Encoding();
+                                Response = enc.GetString(buffer);
+                            }
+                            else
+                                Response = "";
+                        }
+                        else
+                            Response = "";
+                        MessageBox.Show("Error: \r\n" + ex.Message + "\r\n \r\nResponse: \r\n" + Response );
                         //RestartApp(Process.GetCurrentProcess().Id,"");
                         //this.Close();
                         return;
@@ -446,8 +467,9 @@ namespace MusicStream
         {
             if (currentSong != null && playlist != null && playlist.Count > 0)
             {
-                currentSong = getNextSong();
-                if (currentSong == null) return;
+                song Song = getNextSong();
+                if (Song == null) return;
+                currentSong = Song;
                 currentSong.Selected = true;
                 song_change();
                 player.stop();
@@ -458,19 +480,76 @@ namespace MusicStream
             }
         }
 
+        private void PlayPrev(object sender, RoutedEventArgs e)
+        {
+            if (currentSong != null && playlist != null && playlist.Count > 0)
+            {
+                song Song = getPrevSong();
+                if (Song == null) return;
+                currentSong = Song;
+                currentSong.Selected = true;
+                song_change();
+                player.stop();
+                System.Threading.Thread.Sleep(200);
+                player.play(currentSong);
+                song_change();
+                player_changeState();
+            }
+        }
+
+        private song getPrevSong()
+        {
+            if (currentSong != null && playlist != null && playlist.Count > 0)
+            {
+                int index = playlist.IndexOf(currentSong);
+                index--;
+                if (repeatSong)
+                {
+                    index++;
+                }
+                else
+                {
+                    if (Shuffle)
+                    {
+                        int newindex = index - 1;
+                        while (newindex == index - 1) newindex = rand.Next(0, playlist.Count - 1);
+                        index = newindex;
+                    }
+                }
+                if (index < 0)
+                {
+                    index = playlist.Count - 1;
+                    if(!repeatAll) return null;
+                }
+                return playlist[index]; 
+            }
+            return null;
+        }
+
         private song getNextSong()
         {
             if (currentSong != null && playlist != null && playlist.Count > 0)
             {
                 int index = playlist.IndexOf(currentSong);
                 index++;
-                if(Shuffle)
+                if(repeatSong)
                 {
-                    int newindex = index - 1;
-                    while (newindex == index - 1) newindex = rand.Next(0, playlist.Count - 1);
-                    index = newindex;
+                    index--;
                 }
-                if (index > playlist.Count - 1) index = 0;
+                else
+                {
+                    if (Shuffle)
+                    {
+                        int newindex = index - 1;
+                        while (newindex == index - 1) newindex = rand.Next(0, playlist.Count - 1);
+                        index = newindex;
+                    }
+                }
+                if (index > playlist.Count - 1)
+                {
+                    index = 0;
+                    if (!repeatAll) return null;
+                }
                 return playlist[index]; ;
             }
             return null;
@@ -788,7 +867,6 @@ namespace MusicStream
                 }
             }
         }
-
 
     }
 }
