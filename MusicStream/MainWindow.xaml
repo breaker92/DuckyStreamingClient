@@ -304,14 +304,23 @@
         </TabControl>
         <ListView Background="Transparent" SelectionMode="Single"  Grid.Column="1" Grid.RowSpan="2" ItemContainerStyle="{StaticResource PlaylistItem}" ItemsSource="{Binding ElementName=thisWindow, Path=Playlist}" SelectionChanged="ListView_Selected">
             <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <WrapPanel>
-                                <TextBlock Text="{Binding Name}" />
-                            </WrapPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <!--Player-->
+                <DataTemplate>
+                    <WrapPanel>
+                        <WrapPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Tag="{Binding UID}" Click="DeleteSongFromPlaylist" Header="Delete">
+                                    <MenuItem.Icon>
+                                        <Image Width="20" Source="pack://application:,,,/Resources/android-close.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </WrapPanel.ContextMenu>
+                        <TextBlock Text="{Binding Name}" />
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--Player-->
         <Border Grid.Row="2" Grid.Column="1" Padding="10">
             <StackPanel  MinWidth="200" Height="100" >
                 <WrapPanel>

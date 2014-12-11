@@ -856,14 +856,33 @@ namespace MusicStream
                     if (sp.DialogResult == true)
                     {
                         List<song> songs = sp.Songs;
-                        //foreach (song s in songs)
-                        //{
-                        //    playlist.Add(s);
-                        //}
                         playlist.AddRange(songs);
                         NotifyPropertyChanged("Playlist");
                     }
                     box.Text = "";
+                }
+            }
+        }
+
+        private void DeleteSongFromPlaylist(object sender, RoutedEventArgs e)
+        {
+            if (playlist != null && sender != null && sender.GetType() == typeof(MenuItem))
+            {
+                song delSong;
+                object Tag = ((MenuItem)sender).Tag;
+                if (Tag != null && Tag.GetType() == typeof(string))
+                {
+                    string UID = Tag as string;
+                    var delSongs = playlist.Where(x => x.UID == UID);
+                    if (delSongs != null && delSongs.Count() > 0)
+                    {
+                        delSong = delSongs.First();
+                        if (delSong != null)
+                        {
+                            playlist.Remove(delSong);
+                            NotifyPropertyChanged("Playlist");
+                        }
+                    }
                 }
             }
         }
